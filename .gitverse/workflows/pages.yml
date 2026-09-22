@@ -22,7 +22,7 @@ jobs:
         run: test -f docs/index.html
 
       - name: Upload pages artifact
-        uses: gitverse/upload-pages-artifact@v1.0.0
+        uses: actions/upload-pages-artifact@v1
         with:
           path: docs
 
@@ -31,4 +31,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
-        uses: gitverse/deploy-pages@v1.0.0
+        uses: actions/deploy-pages@v1
