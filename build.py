@@ -784,6 +784,7 @@ def render_index(lessons, refs, errors, quizzes=None, pages=None) -> str:
     title = track.get("title", "Разработка игр, 7 класс")
     subtitle = track.get("subtitle", "")
     artifact = track.get("artifact", "")
+    installers = track.get("installers", "")
 
     intro = ""
     if lessons and lessons[0]["track_body"]:
@@ -793,16 +794,43 @@ def render_index(lessons, refs, errors, quizzes=None, pages=None) -> str:
             + "</div></section>"
         )
 
-    return (
+    # Ссылка на хранилище с установщиками и QR на саму эту страницу: адрес
+    # подставляет браузер, поэтому код ведёт туда, где страница реально открыта.
+    actions = ""
+    if installers:
+        actions = (
+            '<div class="hero-actions">'
+            f'<a class="btn-primary" href="{_esc(installers)}" target="_blank" rel="noopener">'
+            "Скачать установщики</a>"
+            '<span class="hero-note">Windows и macOS · Python, PyCharm, pygame-ce, Git</span>'
+            "</div>"
+        )
+
+    qr = (
+        '<aside class="hero-qr">'
+        '<div class="qr-box" data-qr></div>'
+        '<p class="qr-caption">Наведи камеру телефона,<br>чтобы открыть курс</p>'
+        '<code class="qr-url" data-qr-url></code>'
+        "</aside>"
+    )
+
+    page = (
         HEAD.format(title=title, root="")
         + top_bar("", "", back=False)
         + '<header class="hero"><div class="hero-in">'
+        + '<div class="hero-text">'
         + f"<h1>{_esc(title)}</h1>"
         + (f'<p class="sub">{_inline(subtitle, refs, errors, "track")}</p>' if subtitle else "")
         + (f'<p class="final"><span>Главный артефакт</span>{_esc(artifact)}</p>' if artifact else "")
+        + actions
+        + "</div>"
+        + qr
         + "</div></header>"
         + intro
-        + '<div class="bar"><div class="bar-in">'
+    )
+
+    rest = (
+        '<div class="bar"><div class="bar-in">'
         + '<input id="q" type="search" autocomplete="off" spellcheck="false" '
         'placeholder="Поиск: тема, артефакт или команда git…" aria-label="Поиск по курсу">'
         + '<button id="clear" type="button" title="Очистить">×</button>'
@@ -819,6 +847,13 @@ def render_index(lessons, refs, errors, quizzes=None, pages=None) -> str:
         + '<button id="top" type="button" aria-label="Наверх" title="Наверх">↑</button>'
         + FOOT.format(root="")
     )
+
+    # qr.js нужен только на карте курса — грузить его на каждой странице незачем
+    rest = rest.replace(
+        '<script src="assets/site.js">',
+        '<script src="assets/qr.js"></script>\n<script src="assets/site.js">',
+    )
+    return page + rest
 
 
 # ----------------------------------------------------------------------- сборка
@@ -855,7 +890,7 @@ def main() -> int:
     (OUT / "assets").mkdir(parents=True)
     (OUT / "data").mkdir(parents=True)
 
-    for name in ("site.css", "site.js"):
+    for name in ("site.css", "site.js", "qr.js"):
         shutil.copyfile(ASSETS / name, OUT / "assets" / name)
 
     (OUT / "index.html").write_text(

@@ -296,6 +296,25 @@
     });
   }
 
+  /* ---------- QR на стартовую страницу ---------- */
+  function initQr() {
+    const box = document.querySelector('[data-qr]');
+    if (!box) return;
+    const aside = box.closest('.hero-qr');
+
+    // QR ведёт на саму страницу: адрес берём у браузера, без строки поиска и якоря
+    const url = location.href.split('#')[0].split('?')[0];
+    const local = location.protocol === 'file:';
+
+    // открытая локально страница никому не нужна в телефоне — блок убираем
+    if (local || typeof CourseQR === 'undefined' || !CourseQR.render(box, url, { scale: 6 })) {
+      if (aside) aside.remove();
+      return;
+    }
+    const shown = document.querySelector('[data-qr-url]');
+    if (shown) shown.textContent = url.replace(/^https?:\/\//, '');
+  }
+
   /* ---------- печать шпаргалки и документов ---------- */
   function initCheatPrint() {
     document.addEventListener('click', (e) => {
@@ -453,5 +472,6 @@
     initIndex();
     initCheatPrint();
     initQuiz();
+    initQr();
   });
 })();

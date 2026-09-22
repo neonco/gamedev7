@@ -1,12 +1,13 @@
 /**
- * Проверка интерфейса без браузера: викторина и печать шпаргалки.
+ * Проверка интерфейса без браузера: викторина, печать шпаргалки, QR на старте.
  *
  * Требует jsdom:
  *     npm install jsdom
  *     node tools/check_ui.js
  *
  * Проверяется то, что нельзя проверить статически: клики по вариантам,
- * подсчёт результата, раскрытие разборов, сброс и режим печати.
+ * подсчёт результата, раскрытие разборов, сброс, режим печати и сборка QR
+ * из адреса страницы.
  */
 const fs = require('fs');
 const path = require('path');
@@ -112,6 +113,49 @@ async function checkPrint(dom) {
   check('на печать уходит только шпаргалка', document.body.classList.contains('print-cheat'), true);
 }
 
+/**
+ * Стартовая страница: QR должен собраться сам из адреса страницы.
+ *
+ * Адрес задаём «боевой» (иначе блок с QR честно убирается), а скрипты
+ * подкладываем из файлов: сеть тесту не нужна. canvas в jsdom пустой,
+ * поэтому подменяем контекст и считаем, что именно нарисовано.
+ */
+async function checkIndex() {
+  const html = fs
+    .readFileSync(path.join(DOCS, 'index.html'), 'utf8')
+    .replace(/<script src="[^"]*"><\/script>/g, '');
+  const dom = new JSDOM(html, {
+    runScripts: 'dangerously',
+    url: 'https://neonco.github.io/gamedev7/',
+    pretendToBeVisual: true,
+  });
+  const { window } = dom;
+
+  const drawn = [];
+  window.HTMLCanvasElement.prototype.getContext = function () {
+    return {
+      fillStyle: '',
+      fillRect(x, y, w, h) {
+        drawn.push([x, y, w, h, this.fillStyle]);
+      },
+    };
+  };
+
+  window.eval(fs.readFileSync(path.join(ROOT, 'assets', 'qr.js'), 'utf8'));
+  window.eval(fs.readFileSync(path.join(ROOT, 'assets', 'site.js'), 'utf8'));
+  await new Promise((r) => setTimeout(r, 50));
+
+  const { document } = window;
+  const canvas = document.querySelector('.hero-qr canvas');
+  check('блок с QR не выброшен', !!document.querySelector('.hero-qr'), true);
+  check('canvas с QR нарисован', !!canvas, true);
+  check('QR квадратный и не вырожденный', canvas.width > 100 && canvas.width === canvas.height, true);
+  check('адрес под QR — сама страница', document.querySelector('[data-qr-url]').textContent, 'neonco.github.io/gamedev7/');
+  check('модули QR нарисованы', drawn.length > 50, true);
+  check('фон QR белый', drawn[0][4], '#ffffff');
+  check('есть кнопка со ссылкой на установщики', !!document.querySelector('.hero-actions a[href*="drive.google.com"]'), true);
+}
+
 (async () => {
   const quizFiles = fs.readdirSync(path.join(DOCS, 'quiz')).filter((f) => f.endsWith('.html'));
   const lessonFile = fs
@@ -126,6 +170,10 @@ async function checkPrint(dom) {
 
   console.log(`--- печать шпаргалки (${lessonFile}) ---`);
   await checkPrint(await load(path.join('lesson', lessonFile)));
+  console.log();
+
+  console.log('--- стартовая страница: QR ---');
+  await checkIndex();
 
   console.log();
   if (problems.length) {
