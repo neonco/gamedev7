@@ -156,6 +156,31 @@ async function checkIndex() {
   check('есть кнопка со ссылкой на установщики', !!document.querySelector('.hero-actions a[href*="drive.google.com"]'), true);
 }
 
+/**
+ * Адрес под QR не должен переноситься и не должен обрезаться.
+ *
+ * Самый длинный реальный адрес курса — neonco.gitverse.site/gamedev7/
+ * (30 знаков, ~210px моноширинным 11.5px). Поэтому: перенос запрещён,
+ * блок тянется под адрес (width:max-content), сам QR не мельчает
+ * (фиксированные 240px) и есть потолок, чтобы длинный хост не раздувал
+ * шапку. Раньше адрес ломался на две строки: блок был фиксированные 232px,
+ * а под подпись оставалось 200px.
+ */
+function checkQrCaption() {
+  const css = fs.readFileSync(path.join(ROOT, 'assets', 'site.css'), 'utf8');
+  const rule = (name) => (css.match(new RegExp('\\.' + name + '\\{[^}]*\\}')) || [''])[0];
+  const block = rule('hero-qr');
+  const box = rule('qr-box');
+  const url = rule('qr-url');
+
+  check('правило .qr-url на месте', !!url, true);
+  check('адрес запрещено переносить', /white-space:\s*nowrap/.test(url), true);
+  check('блок растягивается под адрес', /width:\s*max-content/.test(block), true);
+  check('у блока есть потолок ширины', /max-width:\s*min\(100%,\s*\d+px\)/.test(block), true);
+  const qrWidth = Number((box.match(/width:\s*(\d+)px/) || [])[1]);
+  check('QR не мельче 240px', qrWidth >= 240, true);
+}
+
 (async () => {
   const quizFiles = fs.readdirSync(path.join(DOCS, 'quiz')).filter((f) => f.endsWith('.html'));
   const lessonFile = fs
@@ -174,6 +199,7 @@ async function checkIndex() {
 
   console.log('--- стартовая страница: QR ---');
   await checkIndex();
+  checkQrCaption();
 
   console.log();
   if (problems.length) {

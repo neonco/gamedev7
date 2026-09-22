@@ -61,14 +61,18 @@ code{font-family:Consolas,Monaco,'SF Mono',monospace;font-size:.92em}
 .btn-primary:hover{filter:brightness(1.08);color:var(--bg)}
 .hero-note{color:var(--muted);font-size:13.5px;max-width:34ch}
 .hero-qr{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);
-  padding:16px;text-align:center;width:232px}
-.qr-box{background:#fff;border-radius:8px;padding:9px;line-height:0}
+  padding:16px;text-align:center;width:max-content;max-width:min(100%,360px)}
+.qr-box{background:#fff;border-radius:8px;padding:10px;line-height:0;width:240px;margin:0 auto}
 .qr-box canvas{display:block;width:100%;height:auto;image-rendering:pixelated}
 .qr-caption{color:var(--muted);font-size:13px;margin-top:10px;line-height:1.4}
-.qr-url{display:block;color:var(--faint);font-size:11.5px;margin-top:7px;word-break:break-all}
+/* адрес должен читаться одной строкой: переносить его нельзя, а сам блок
+   растягивается под адрес — иначе длинный хост обрежется */
+.qr-url{display:block;color:var(--faint);font-size:11.5px;margin-top:7px;
+  white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+.qr-url::-webkit-scrollbar{display:none}
 @media (max-width:780px){
   .hero-in{grid-template-columns:1fr;gap:22px}
-  .hero-qr{width:auto;max-width:232px;justify-self:start}
+  .hero-qr{width:max-content;max-width:100%;justify-self:start}
 }
 .bar{position:sticky;top:57px;z-index:15;background:color-mix(in srgb,var(--bg) 92%,transparent);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--border);margin-top:22px}

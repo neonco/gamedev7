@@ -307,7 +307,7 @@
     const local = location.protocol === 'file:';
 
     // открытая локально страница никому не нужна в телефоне — блок убираем
-    if (local || typeof CourseQR === 'undefined' || !CourseQR.render(box, url, { scale: 6 })) {
+    if (local || typeof CourseQR === 'undefined' || !CourseQR.render(box, url, { scale: 8 })) {
       if (aside) aside.remove();
       return;
     }
