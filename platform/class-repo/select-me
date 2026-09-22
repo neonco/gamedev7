@@ -1,0 +1,67 @@
+#!/bin/sh
+# Выбор автора коммитов для ученика, который работает не на Windows.
+# То же самое, что делает select-me.cmd.
+#
+# Имя файла — select-me, а не select: слово select зарезервировано в bash,
+# и скрипт с таким именем нельзя запустить обычной командой.
+
+cd "$(dirname "$0")" || exit 1
+
+echo
+echo "  Кто сегодня работает?"
+echo
+
+if [ ! -d .git ]; then
+  echo "  Ошибка: это не репозиторий."
+  echo "  Открой папку проекта и запусти ./select-me из неё."
+  echo
+  exit 1
+fi
+
+if ! command -v git >/dev/null 2>&1; then
+  echo "  Ошибка: git не найден. Скажи учителю."
+  echo
+  exit 1
+fi
+
+printf "Твой логин: "
+read -r login
+
+if [ -z "$login" ]; then
+  echo "  Логин не введён."
+  exit 1
+fi
+
+if [ ! -d "students/$login" ]; then
+  echo
+  echo "  Ошибка: папки students/$login нет."
+  echo
+  echo "  Доступные папки:"
+  for d in students/*/; do
+    [ -d "$d" ] && echo "      $(basename "$d")"
+  done
+  echo
+  exit 1
+fi
+
+if [ -f "students/$login/name.txt" ]; then
+  name=$(head -n 1 "students/$login/name.txt")
+else
+  printf "Как тебя зовут (попадёт в историю коммитов): "
+  read -r name
+fi
+
+if [ -z "$name" ]; then
+  echo "  Имя не задано."
+  exit 1
+fi
+
+git config user.name "$name"
+git config user.email "$login@class.local"
+
+echo
+echo "  Готово. Твои коммиты будут подписаны так:"
+echo
+git config --get user.name
+git config --get user.email
+echo

@@ -1,0 +1,52 @@
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+      PYGAME_HIDE_SUPPORT_PROMPT: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Поставить pygame-ce
+        run: python3 -m pip install pygame-ce
+
+      - name: Проверить сайт
+        run: python3 tools/check_site.py
+
+      - name: Проверить код змейки
+        run: python3 tools/check_snake.py
+
+  ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Собрать сайт
+        run: python3 build.py
+
+      - name: Поставить jsdom
+        run: npm install jsdom --no-save
+
+      - name: Проверить викторину и печать
+        run: node tools/check_ui.js

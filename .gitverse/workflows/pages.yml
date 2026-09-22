@@ -1,0 +1,34 @@
+name: Publish Pages (GitVerse)
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Проверить сайт
+        run: python3 tools/check_site.py
+
+      - name: Собрать сайт
+        run: python3 build.py
+
+      - name: Verify entrypoint
+        run: test -f docs/index.html
+
+      - name: Upload pages artifact
+        uses: gitverse/upload-pages-artifact@v1.0.0
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: gitverse/deploy-pages@v1.0.0

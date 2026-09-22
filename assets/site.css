@@ -1,0 +1,300 @@
+/* Курс «Разработка игр, 7 класс».
+   Токены и компоненты унаследованы от EGEINF, добавлена раскладка курса. */
+
+:root{
+  --bg:#fbfaf7; --fg:#1f2328; --muted:#5b6169; --faint:#8b9199;
+  --card:#f4f2ee; --code-bg:#f3f1ec; --border:#e6e2da;
+  --accent:#2f7d43; --accent-soft:rgba(47,125,67,.12);
+  --warn:#a8621b; --warn-soft:rgba(168,98,27,.12);
+  --bad:#b03a3a; --bad-soft:rgba(176,58,58,.12);
+  --syn-k:#034c7c; --syn-s:#a44185; --syn-c:#8a8a90; --syn-n:#174781; --syn-b:#7eb233;
+  --maxw:1120px; --rad:12px;
+}
+html[data-theme="dark"]{
+  --bg:#15171a; --fg:#e9e7e3; --muted:#a9a7a2; --faint:#7d7b76;
+  --card:#1c1f23; --code-bg:#1e2126; --border:#2b2f34;
+  --accent:#6fb07f; --accent-soft:rgba(111,176,127,.14);
+  --warn:#d9a05b; --warn-soft:rgba(217,160,91,.14);
+  --bad:#d97b7b; --bad-soft:rgba(217,123,123,.14);
+  --syn-k:#c586c0; --syn-s:#ce9178; --syn-c:#7a7a80; --syn-n:#b5cea8; --syn-b:#dcdcaa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+body{
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--fg);font-size:18px;line-height:1.65;
+  padding-bottom:72px;-webkit-tap-highlight-color:transparent;
+}
+a{color:var(--accent)}
+code{font-family:Consolas,Monaco,'SF Mono',monospace;font-size:.92em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--bg);color:var(--fg);padding:10px 14px;border:1px solid var(--border);border-radius:8px;z-index:100}
+.skip:focus{left:12px;top:12px}
+
+/* ---------- шапка ---------- */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.top-in{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:14px}
+.back,.brand{text-decoration:none;color:var(--fg);font-weight:600;font-size:15px}
+.back:hover{color:var(--accent)}
+.crumbs{color:var(--faint);font-size:14px;margin-left:auto;font-variant-numeric:tabular-nums}
+#theme{font:inherit;font-size:16px;background:none;border:1px solid var(--border);border-radius:10px;
+  color:var(--muted);padding:7px 12px;cursor:pointer}
+#theme:hover{background:var(--card);color:var(--fg)}
+
+/* ---------- карта курса ---------- */
+.hero{max-width:var(--maxw);margin:0 auto;padding:40px 24px 12px}
+.hero h1{font-size:clamp(26px,3.4vw,36px);font-weight:650;letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
+.hero .sub{color:var(--muted);margin-top:12px;font-size:17px;max-width:70ch}
+.hero .final{margin-top:18px;padding:12px 16px;border:1px solid var(--accent);border-radius:var(--rad);
+  background:var(--accent-soft);font-size:16px}
+.hero .final span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--accent);font-weight:700;margin-bottom:4px}
+.bar{position:sticky;top:57px;z-index:15;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--border);margin-top:22px}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+#q{flex:1;min-width:220px;padding:11px 15px;font-size:16px;border:1px solid var(--border);
+  border-radius:10px;background:var(--card);color:var(--fg)}
+#q:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#clear{display:none;font:inherit;font-size:15px;padding:8px 12px;border:1px solid var(--border);
+  border-radius:10px;background:none;color:var(--muted);cursor:pointer}
+#clear:hover{color:var(--fg)}
+.prog{color:var(--muted);font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ghostbtn{font:inherit;font-size:14px;padding:8px 13px;border:1px solid var(--border);border-radius:10px;
+  background:none;color:var(--muted);cursor:pointer}
+.ghostbtn:hover{color:var(--fg);border-color:var(--faint)}
+label.file{display:inline-block}
+
+/* ---------- вводная часть трека ---------- */
+.intro{max-width:var(--maxw);margin:20px auto 0;padding:0 24px}
+.intro-in{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:6px 22px 18px}
+.intro-in h2{font-size:19px;font-weight:650;letter-spacing:-.01em;margin:20px 0 8px;
+  padding-bottom:8px;border-bottom:1px solid var(--border)}
+.intro-in p,.intro-in ul,.intro-in ol{max-width:78ch}
+.intro-in p{margin:12px 0}
+.intro-in ul,.intro-in ol{margin:12px 0 12px 22px}
+.intro-in li{margin:6px 0}
+
+main{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.sprint{margin-top:34px}
+.sprint-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--border);padding-bottom:10px}
+.sprint-head h2{font-size:21px;font-weight:600;letter-spacing:-.01em}
+.scount{color:var(--faint);font-size:13px;font-variant-numeric:tabular-nums}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-top:16px}
+.lcard{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid var(--border);
+  border-radius:var(--rad);background:var(--card);text-decoration:none;color:var(--fg);
+  transition:border-color .15s ease,transform .15s ease}
+.lcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.lcard .lnum{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.lcard .ltitle{font-size:18px;font-weight:600;line-height:1.3}
+.lcard .lart{font-size:14px;color:var(--muted)}
+.lcard .lcmds{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.cmd{font-family:Consolas,Monaco,monospace;font-size:12.5px;padding:3px 8px;border-radius:999px;
+  border:1px solid var(--border);background:var(--bg);color:var(--muted);white-space:nowrap}
+.empty{display:none;color:var(--muted);text-align:center;padding:56px 24px}
+.lcard.hide{display:none}
+.sprint.hide{display:none}
+
+/* ---------- прогресс ---------- */
+.pbar{height:6px;border-radius:999px;background:var(--card);border:1px solid var(--border);overflow:hidden}
+.pbar span{display:block;height:100%;width:0;background:var(--accent);transition:width .25s ease}
+.pbar.mini{height:4px;margin-top:4px}
+.pbar.done span{background:var(--accent)}
+
+/* ---------- страница урока ---------- */
+.lesson{padding-bottom:20px}
+.lesson-head{padding:34px 0 6px}
+.lesson-head .lnum{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.lesson-head h1{font-size:clamp(25px,3.2vw,34px);font-weight:650;letter-spacing:-.02em;line-height:1.15;margin-top:6px;text-wrap:balance}
+.artifact-line{margin-top:14px;padding:12px 16px;border-left:3px solid var(--accent);background:var(--card);
+  border-radius:0 var(--rad) var(--rad) 0;font-size:16px}
+.artifact-line span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:2px}
+.cmds{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.lesson-head .pbar{margin-top:18px}
+.pnote{color:var(--faint);font-size:13.5px;margin-top:8px}
+
+.sec{margin-top:34px}
+.sec>h2{font-size:19px;font-weight:650;letter-spacing:-.01em;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.sec p{margin:12px 0;max-width:78ch}
+.sec ul,.sec ol{margin:12px 0 12px 22px;max-width:78ch}
+.sec li{margin:6px 0}
+.sec h3{font-size:17px;font-weight:650;margin:22px 0 8px}
+.sec h4{font-size:16px;font-weight:600;margin:18px 0 6px;color:var(--muted)}
+.sec-goal ul{list-style:none;margin-left:0}
+.sec-goal li{padding-left:26px;position:relative}
+.sec-goal li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+.sec-artifact{border:1px solid var(--accent);background:var(--accent-soft);border-radius:var(--rad);padding:4px 18px 14px}
+.sec-artifact>h2{border-bottom-color:transparent;color:var(--accent)}
+.sec-teacher{background:var(--card);border:1px dashed var(--border);border-radius:var(--rad);padding:4px 18px 14px}
+.sec-teacher>h2{border-bottom-color:transparent;color:var(--muted)}
+
+/* ---------- врезки ---------- */
+.callout{margin:16px 0;padding:13px 16px;border-radius:var(--rad);background:var(--card);
+  border-left:3px solid var(--faint);max-width:78ch}
+.callout.важно,.callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.callout.ошибка,.callout.bad,.callout.error{border-left-color:var(--bad);background:var(--bad-soft)}
+.callout.подсказка,.callout.tip,.callout.note{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout.цель{border-left-color:var(--accent)}
+
+/* ---------- код ---------- */
+.codeblock{margin:16px 0;border:1px solid var(--border);border-radius:var(--rad);overflow:hidden;background:var(--code-bg)}
+.cb-head{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);
+  background:var(--bg)}
+.cb-lang{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:700}
+.copy{margin-left:auto;font:inherit;font-size:13px;padding:5px 12px;border:1px solid var(--border);
+  border-radius:999px;background:var(--bg);color:var(--muted);cursor:pointer}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+.codeblock pre{padding:14px 16px;overflow-x:auto;tab-size:4;font-size:15px;line-height:1.6}
+.codeblock code{font-family:Consolas,Monaco,'SF Mono',monospace}
+.k{color:var(--syn-k);font-weight:600}
+.s{color:var(--syn-s)}
+.c{color:var(--syn-c);font-style:italic}
+.n{color:var(--syn-n)}
+.b{color:var(--syn-b)}
+
+/* ---------- чек-лист и рабочий лист ---------- */
+.checklist{list-style:none;margin-left:0;max-width:78ch}
+.checklist li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)}
+.checklist li:last-child{border-bottom:0}
+.checklist input[type=checkbox]{flex:0 0 auto;width:20px;height:20px;margin-top:3px;accent-color:var(--accent);cursor:pointer}
+.checklist label{cursor:pointer}
+.checklist input[type=checkbox]:checked+label{color:var(--faint);text-decoration:line-through}
+.sheet-row{flex-direction:column;gap:6px;align-items:stretch}
+.sheet-row label{font-size:15.5px;color:var(--muted)}
+.sheet-row input[type=text]{width:100%;padding:9px 12px;font:inherit;font-size:15.5px;border:1px solid var(--border);
+  border-radius:9px;background:var(--bg);color:var(--fg)}
+.sheet-row input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* ---------- ссылки и переходы ---------- */
+.cross{text-decoration:none;border-bottom:1px dashed var(--accent)}
+.cross:hover{border-bottom-style:solid}
+.broken{color:var(--bad);border-bottom:1px dotted var(--bad)}
+.pager{max-width:var(--maxw);margin:44px auto 0;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid var(--border);
+  border-radius:999px;background:var(--card);color:var(--fg);text-decoration:none;font-size:14.5px}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.pill.ghost{color:var(--faint);border-style:dashed}
+
+.site-foot{max-width:var(--maxw);margin:56px auto 0;padding:18px 24px 0;border-top:1px solid var(--border);
+  color:var(--faint);font-size:13.5px}
+
+#top{position:fixed;right:20px;bottom:20px;z-index:50;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:20px;line-height:1;
+  cursor:pointer;opacity:0;visibility:hidden;transition:opacity .2s ease,transform .2s ease;
+  box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#top.show{opacity:1;visibility:visible}
+#top:hover{border-color:var(--accent);color:var(--accent)}
+
+@media (max-width:640px){
+  .lgrid{grid-template-columns:1fr}
+  .bar{top:53px}
+  body{font-size:17px}
+}
+
+/* ---------- печать рабочего листа ---------- */
+@media print{
+  .top,.bar,.pager,.site-foot,#top,.cb-head,.copy{display:none !important}
+  body{background:#fff;color:#000;font-size:12pt;padding:0}
+  a{color:#000;text-decoration:none}
+  .codeblock,.callout,.sec-artifact{border-color:#999;background:#fff}
+  .codeblock pre{white-space:pre-wrap;word-break:break-word}
+  .sec{break-inside:avoid-page}
+  .lesson-head h1{font-size:18pt}
+  .sheet-row input[type=text]{border:0;border-bottom:1px solid #000;border-radius:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+/* ---------- шпаргалка для печати ---------- */
+.sec-cheat{border:1px solid var(--accent);border-radius:var(--rad);padding:4px 22px 18px;background:var(--card)}
+.sec-cheat>h2{border-bottom-color:transparent;color:var(--accent);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cheat-print{margin-left:auto;font:inherit;font-size:13.5px;padding:6px 13px;border:1px solid var(--accent);
+  border-radius:999px;background:var(--accent-soft);color:var(--accent);cursor:pointer;white-space:nowrap}
+.cheat-print:hover{background:var(--accent);color:var(--bg)}
+.cheat-body h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  font-weight:700;margin:18px 0 8px}
+.cheat-body h3:first-child{margin-top:12px}
+.cheat-body ul,.cheat-body ol{margin:8px 0 8px 20px;max-width:78ch}
+.cheat-body p{margin:10px 0;max-width:78ch}
+.cheat-body .codeblock{margin:12px 0}
+
+/* ---------- методичка под спойлером ---------- */
+details.sec-teacher{margin-top:34px;background:var(--card);border:1px dashed var(--border);
+  border-radius:var(--rad);padding:0 20px}
+details.sec-teacher>summary{cursor:pointer;font-weight:650;font-size:16px;color:var(--muted);
+  padding:15px 0;list-style:none;display:flex;align-items:center;gap:9px}
+details.sec-teacher>summary::-webkit-details-marker{display:none}
+details.sec-teacher>summary::before{content:"▸";display:inline-block;transition:transform .18s ease;color:var(--faint)}
+details.sec-teacher[open]>summary::before{transform:rotate(90deg)}
+details.sec-teacher>summary:hover{color:var(--fg)}
+.teacher-body{padding-bottom:16px}
+.teacher-body ul{margin:8px 0 8px 20px;max-width:78ch}
+.teacher-body p{margin:10px 0;max-width:78ch}
+
+/* ---------- викторина ---------- */
+.quiz-hint{color:var(--muted);font-size:15px;margin-top:14px;max-width:74ch}
+.quiz-q{margin-top:24px;border:1px solid var(--border);border-radius:var(--rad);padding:4px 20px 18px;background:var(--card)}
+.quiz-q>h2{font-size:17px;font-weight:600;padding-bottom:9px;border-bottom:1px solid var(--border);margin-bottom:12px;line-height:1.4}
+.q-num{color:var(--accent);font-weight:700}
+.quiz-q .quiz-text p:first-child{margin-top:0}
+.quiz-options{list-style:none;margin:12px 0 0;display:flex;flex-direction:column;gap:8px}
+.quiz-options li{margin:0}
+.opt{display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;font:inherit;font-size:16px;
+  line-height:1.5;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);
+  color:var(--fg);cursor:pointer;transition:border-color .15s ease,background-color .15s ease}
+.opt:hover{border-color:var(--accent)}
+.opt-mark{flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--faint);
+  margin-top:2px;position:relative}
+.opt.picked{border-color:var(--accent);background:var(--accent-soft)}
+.opt.picked .opt-mark{border-color:var(--accent)}
+.opt.picked .opt-mark::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--accent)}
+.opt.good{border-color:var(--accent);background:var(--accent-soft)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt.good .opt-mark::after,.opt.bad .opt-mark::after{position:absolute;inset:0;text-align:center;
+  font-size:14px;line-height:19px}
+.opt.good .opt-mark::after{content:"✓";color:var(--accent)}
+.opt.bad .opt-mark::after{content:"✕";color:var(--bad)}
+.opt[disabled]{cursor:default}
+.quiz-q.done .opt:hover{border-color:var(--border)}
+.quiz-q.done .opt.good:hover{border-color:var(--accent)}
+.quiz-q.done .opt.bad:hover{border-color:var(--bad)}
+.quiz-explain{margin-top:14px}
+.quiz-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:28px}
+button.primary{font:inherit;font-size:16px;font-weight:600;padding:11px 22px;border:1px solid var(--accent);
+  border-radius:10px;background:var(--accent);color:var(--bg);cursor:pointer}
+button.primary:hover{filter:brightness(1.08)}
+.quiz-score{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.quiz-score.good{color:var(--accent);font-weight:600}
+
+/* ---------- печать только шпаргалки ---------- */
+@media print{
+  body.print-cheat .top,
+  body.print-cheat .pager,
+  body.print-cheat .site-foot,
+  body.print-cheat #top,
+  body.print-cheat .cmds,
+  body.print-cheat .artifact-line,
+  body.print-cheat .sec:not(.sec-cheat),
+  body.print-cheat details.sec-teacher{display:none !important}
+  body.print-cheat .lesson-head{padding-top:0}
+  body.print-cheat .lesson-head .pbar{display:none}
+  body.print-cheat .sec-cheat{border-color:#999;background:#fff;break-inside:auto}
+  body.print-cheat .cheat-print{display:none}
+  body.print-cheat .cheat-body h3{border-bottom:1px solid #ccc;padding-bottom:3px}
+}
+
+/* ---------- печать документа целиком ---------- */
+main.doc .lesson-head .cheat-print{align-self:flex-start;margin-top:16px}
+main.doc .sec-teacher{display:block}
+@media print{
+  body.print-doc .top,
+  body.print-doc .site-foot,
+  body.print-doc #top,
+  body.print-doc .cheat-print,
+  body.print-doc details.sec-teacher{display:none !important}
+  body.print-doc .lesson-head{padding-top:0}
+  body.print-doc .sec{break-inside:avoid-page}
+  body.print-doc .sec>h2{border-bottom:1px solid #ccc}
+}
