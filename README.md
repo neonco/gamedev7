@@ -184,6 +184,11 @@ time: 20 минут
 
 > [!важно]
 > На GitVerse публикацию нужно один раз включить руками: настройки репозитория → **Страницы** → включить и выбрать источник **Воркфлоу**. Без этого раннер не получает доступ к экшенам Pages, и workflow падает с `authentication required: Repository not found`. В API это поле (`has_pages`) только для чтения, поэтому автоматически не включается.
+>
+> Шаблоны («Simple HTML Page», «Jekyll») нажимать не нужно: они создают свой workflow и затрут наш. Адрес сайта — [neonco.gitverse.site/gamedev7](https://neonco.gitverse.site/gamedev7/).
+
+> [!важно]
+> Экшены Pages на GitVerse лежат в пространстве `actions/`, а не `gitverse/`, как написано в документации: `gitverse/upload-pages-artifact@v1.0.0` не существует, и job падает на разборе шагов с `repository not found`. Рабочий вариант — `actions/upload-pages-artifact@v1` и `actions/deploy-pages@v1`.
 
 ## Проверки
 
